@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParkingCommandServiceTest {
@@ -91,7 +90,7 @@ public class ParkingCommandServiceTest {
     verify(parkingSpotDao, times(1)).upsert(any(ParkingSpot.class));
     verify(parkedVehicleDao, times(1)).upsert(any(ParkedVehicle.class));
 
-    assertTrue(parkingSpotNumber == NEAREST_PARKING_SPOT);
+    assertEquals(parkingSpotNumber, NEAREST_PARKING_SPOT);
   }
 
   @Test
@@ -104,7 +103,7 @@ public class ParkingCommandServiceTest {
     verify(parkingSpotDao, times(0)).upsert(any(ParkingSpot.class));
     verify(parkedVehicleDao, times(0)).upsert(any(ParkedVehicle.class));
 
-    assertTrue(parkingSpotNumber == FAILED_PARKING_SPOT);
+    assertEquals(parkingSpotNumber, FAILED_PARKING_SPOT);
   }
 
   @Test
@@ -117,7 +116,7 @@ public class ParkingCommandServiceTest {
     verify(parkingSpotDao, times(0)).upsert(any(ParkingSpot.class));
     verify(parkedVehicleDao, times(0)).upsert(any(ParkedVehicle.class));
 
-    assertTrue(parkingSpotNumber == FAILED_PARKING_SPOT);
+    assertEquals(parkingSpotNumber, FAILED_PARKING_SPOT);
   }
 
 

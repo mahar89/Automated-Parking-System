@@ -1,7 +1,5 @@
 package com.ticketing.parkingsystem.entities;
 
-import com.ticketing.parkingsystem.entities.builder.ParkedVehicleBuilder;
-
 import java.util.Objects;
 
 public final class ParkedVehicle {
@@ -33,8 +31,8 @@ public final class ParkedVehicle {
     return parkingTicket;
   }
 
-  public static ParkedVehicleBuilder builder() {
-    return new ParkedVehicleBuilder();
+  public static ParkedVehicle.ParkedVehicleBuilder builder() {
+    return new ParkedVehicle.ParkedVehicleBuilder();
   }
 
   @Override
@@ -51,5 +49,36 @@ public final class ParkedVehicle {
   @Override
   public int hashCode() {
     return Objects.hash(regNumber, color, type, parkingTicket);
+  }
+
+  public static class ParkedVehicleBuilder {
+    private VehicleType type;
+    private String color;
+    private String regNumber;
+    private ParkingTicket parkingTicket;
+
+    public ParkedVehicle.ParkedVehicleBuilder setType(VehicleType type) {
+      this.type = type;
+      return this;
+    }
+
+    public ParkedVehicle.ParkedVehicleBuilder setColor(String color) {
+      this.color = color;
+      return this;
+    }
+
+    public ParkedVehicle.ParkedVehicleBuilder setRegNumber(String regNumber) {
+      this.regNumber = regNumber;
+      return this;
+    }
+
+    public ParkedVehicle.ParkedVehicleBuilder setParkingTicket(ParkingTicket parkingTicket) {
+      this.parkingTicket = parkingTicket;
+      return this;
+    }
+
+    public ParkedVehicle build() {
+      return new ParkedVehicle(type, color, regNumber, parkingTicket);
+    }
   }
 }

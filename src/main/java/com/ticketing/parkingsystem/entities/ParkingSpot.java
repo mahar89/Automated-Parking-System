@@ -1,7 +1,5 @@
 package com.ticketing.parkingsystem.entities;
 
-import com.ticketing.parkingsystem.entities.builder.ParkingSpotBuilder;
-
 import java.util.Objects;
 
 public final class ParkingSpot {
@@ -26,8 +24,8 @@ public final class ParkingSpot {
     return null == parkedVehicle;
   }
 
-  public static ParkingSpotBuilder builder() {
-    return new ParkingSpotBuilder();
+  public static ParkingSpot.ParkingSpotBuilder builder() {
+    return new ParkingSpot.ParkingSpotBuilder();
   }
 
   @Override
@@ -41,5 +39,24 @@ public final class ParkingSpot {
   @Override
   public int hashCode() {
     return Objects.hash(spotNumber);
+  }
+
+  public static class ParkingSpotBuilder {
+    private int spotNumber;
+    private ParkedVehicle parkedVehicle;
+
+    public ParkingSpot.ParkingSpotBuilder setSpotNumber(int spotNumber) {
+      this.spotNumber = spotNumber;
+      return this;
+    }
+
+    public ParkingSpot.ParkingSpotBuilder setParkedVehicle(ParkedVehicle parkedVehicle) {
+      this.parkedVehicle = parkedVehicle;
+      return this;
+    }
+
+    public ParkingSpot build() {
+      return new ParkingSpot(spotNumber, parkedVehicle);
+    }
   }
 }

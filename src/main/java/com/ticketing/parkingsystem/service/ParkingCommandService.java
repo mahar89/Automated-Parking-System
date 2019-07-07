@@ -6,8 +6,6 @@ import com.ticketing.parkingsystem.entities.ParkedVehicle;
 import com.ticketing.parkingsystem.entities.ParkingSpot;
 import com.ticketing.parkingsystem.entities.ParkingTicket;
 import com.ticketing.parkingsystem.entities.VehicleType;
-import com.ticketing.parkingsystem.entities.builder.ParkedVehicleBuilder;
-import com.ticketing.parkingsystem.entities.builder.ParkingSpotBuilder;
 
 import java.util.Comparator;
 import java.util.List;
@@ -46,13 +44,13 @@ public class ParkingCommandService {
       availableSpotNumber = availableParkingSpot.getSpotNumber();
 
       ParkingTicket parkingTicket = new ParkingTicket(regNumber, availableSpotNumber);
-      ParkedVehicle parkedVehicle = new ParkedVehicleBuilder()
+      ParkedVehicle parkedVehicle = ParkedVehicle.builder()
           .setRegNumber(regNumber)
           .setColor(color)
           .setParkingTicket(parkingTicket)
           .setType(VehicleType.CAR)
           .build();
-      ParkingSpot parkingSpot = new ParkingSpotBuilder()
+      ParkingSpot parkingSpot = ParkingSpot.builder()
           .setSpotNumber(availableSpotNumber)
           .setParkedVehicle(parkedVehicle)
           .build();
@@ -87,7 +85,7 @@ public class ParkingCommandService {
 
     if (successfullyLeft = parkingSpotOptional.isPresent() && !parkingSpotOptional.get().isFree()) {
       ParkingSpot bookedParkingSpot = parkingSpotOptional.get();
-      ParkingSpot freeParkingSpot = new ParkingSpotBuilder()
+      ParkingSpot freeParkingSpot = ParkingSpot.builder()
           .setSpotNumber(spotNumber)
           .build();
 
