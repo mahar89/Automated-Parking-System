@@ -41,13 +41,13 @@ public class ParkingQueryServiceTest {
   @Test
   public void GIVEN_a_request_to_get_parkingSpotNumbers_for_specific_colored_vehicles_WHEN_getParkingSpotNumbersOfVehiclesWithColor_invoked_THEN_returns_list_of_parkingSpotNumbers() {
 
-    assertEquals(parkingQueryService.getParkingSpotNumberForVehicleWithRegNumber(VEHICLE_COLOR), null);
+    assertEquals(parkingQueryService.getParkingSpotNumbersOfVehiclesWithColor(VEHICLE_COLOR), null);
   }
 
   @Test
   public void GIVEN_a_request_to_get_parkingSpotNumbers_for_specific_colored_vehicles_WHEN_getParkingSpotNumbersOfVehiclesWithColor_invoked_AND_no_vehicles_exist_with_given_color_exist_THEN_returns_empty_list_of_parkingSpotNumbers() {
 
-    assertEquals(parkingQueryService.getParkingSpotNumberForVehicleWithRegNumber(VEHICLE_COLOR), null);
+    assertEquals(parkingQueryService.getParkingSpotNumbersOfVehiclesWithColor(VEHICLE_COLOR), null);
   }
 
 

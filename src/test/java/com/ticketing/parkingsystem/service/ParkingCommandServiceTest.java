@@ -1,37 +1,62 @@
 package com.ticketing.parkingsystem.service;
 
+import com.ticketing.parkingsystem.dao.Dao;
+import com.ticketing.parkingsystem.entities.ParkingSpot;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Collections;
+
 import static com.ticketing.parkingsystem.util.ParkingSystemTestUtil.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParkingCommandServiceTest {
+
+  @Mock
+  private Dao<ParkingSpot> parkingSpotDao;
 
   @InjectMocks
   private ParkingCommandService parkingCommandService;
 
   @Test
   public void GIVEN_a_valid_parkingLot_size_AND_parkingLot_never_created_WHEN_createParkingLot_invoked_THEN_parkingLot_is_created() {
+    when(parkingSpotDao.getAll()).thenReturn(Collections.emptyList());
 
-    assertTrue(parkingCommandService.createParkingLot(VALID_PARKING_SIZE));
+    boolean isCreated = parkingCommandService.createParkingLot(VALID_PARKING_SIZE);
+    verify(parkingSpotDao).getAll();
+    verify(parkingSpotDao, times(VALID_PARKING_SIZE)).upsert(any(ParkingSpot.class));
+
+    assertTrue(isCreated);
   }
 
   @Test
   public void GIVEN_an_invalid_parkingLot_size_AND_parkingLot_never_created_WHEN_createParkingLot_invoked_THEN_parkingLot_is_not_created() {
+    when(parkingSpotDao.getAll()).thenReturn(Collections.emptyList());
 
-    assertTrue(parkingCommandService.createParkingLot(INVALID_PARKING_SIZE));
+    boolean isCreated = parkingCommandService.createParkingLot(INVALID_PARKING_SIZE);
+    verify(parkingSpotDao).getAll();
+    verify(parkingSpotDao, times(0)).upsert(any(ParkingSpot.class));
+
+    assertFalse(isCreated);
   }
 
 
   @Test
   public void GIVEN_a_parkingLot_size_exceeding_permissible_number_WHEN_createParkingLot_invoked_THEN_parkingLot_is_not_created() {
+    when(parkingSpotDao.getAll()).thenReturn(Collections.emptyList());
 
-    assertTrue(parkingCommandService.createParkingLot(VALID_PARKING_SIZE));
+    boolean isCreated = parkingCommandService.createParkingLot(PARKING_SIZE_MAX);
+    verify(parkingSpotDao).getAll();
+    verify(parkingSpotDao, times(0)).upsert(any(ParkingSpot.class));
+
+    assertFalse(isCreated);
   }
 
   @Test

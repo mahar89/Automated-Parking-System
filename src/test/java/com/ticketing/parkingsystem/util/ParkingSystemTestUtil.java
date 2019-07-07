@@ -7,7 +7,9 @@ public class ParkingSystemTestUtil {
 
   public static final int VALID_PARKING_SIZE = 6;
 
-  public static final int INVALID_PARKING_SIZE = Integer.MAX_VALUE;
+  public static final int INVALID_PARKING_SIZE = -1;
+
+  public static final int PARKING_SIZE_MAX = Integer.MAX_VALUE;
 
   public static final int INVALID_PARKING_SPOT = Integer.MAX_VALUE;
 
