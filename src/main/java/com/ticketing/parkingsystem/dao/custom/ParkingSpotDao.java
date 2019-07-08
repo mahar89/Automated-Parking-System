@@ -11,7 +11,7 @@ public class ParkingSpotDao implements Dao<ParkingSpot> {
 
   @Override
   public Optional<ParkingSpot> getById(String spotNumber) {
-    return Optional.ofNullable(idToParkingSpotMap.get(spotNumber));
+    return Optional.ofNullable(idToParkingSpotMap.get(Integer.parseInt(spotNumber)));
   }
 
   @Override

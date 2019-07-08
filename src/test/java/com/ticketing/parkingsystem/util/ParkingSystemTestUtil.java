@@ -84,20 +84,18 @@ public class ParkingSystemTestUtil {
   }
 
   public static List<ParkedVehicle> getParkedVehiclesStub() {
-    List<ParkedVehicle> parkedVehicles = Arrays.asList(
+    return Arrays.asList(
         ParkedVehicle.builder()
             .setColor(VEHICLE_COLOR)
-            .setRegNumber("KA-01-HH-3141")
+            .setRegNumber(VEHICLE_REG_NUMBERS.get(0))
             .setType(VehicleType.CAR)
             .setParkingTicket(new ParkingTicket(VEHICLE_REG_NUMBERS.get(0), 1))
             .build(),
         ParkedVehicle.builder()
             .setColor(VEHICLE_COLOR)
-            .setRegNumber("MH-01-KH-5141")
+            .setRegNumber(VEHICLE_REG_NUMBERS.get(1))
             .setType(VehicleType.CAR)
             .setParkingTicket(new ParkingTicket(VEHICLE_REG_NUMBERS.get(1), 2))
             .build());
-
-    return parkedVehicles;
   }
 }
