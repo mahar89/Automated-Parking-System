@@ -28,6 +28,12 @@ public class ParkingSystemApp {
 
   private static void executeCommands(Scanner input) {
     AutomatedParkingSimulator automatedParkingSimulator = AutomatedParkingSimulator.getInstance();
+    System.out
+        .println("Type 'help' to get the list of commands.");
+    System.out
+        .println("Type 'stop' to stop the application.");
+    System.out
+        .println("Start typing.... \n");
 
     do {
       String next = input.nextLine();
@@ -42,10 +48,12 @@ public class ParkingSystemApp {
             .println("Type 'leave' followed by parking spot number");
         System.out
             .println("Type 'status' to get parking status.");
-        System.out.println("Type 'registration_numbers_for_cars_with_colour' followed by color.");
-        System.out.println("Type 'slot_numbers_for_cars_with_colour' followed by color.");
-        System.out.println("Type 'slot_number_for_registration_number' followed by color.");
-        System.out.println("Type 'stop' to stop the application.");
+        System.out
+            .println("Type 'registration_numbers_for_cars_with_colour' followed by color.");
+        System.out
+            .println("Type 'slot_numbers_for_cars_with_colour' followed by color.");
+        System.out
+            .println("Type 'slot_number_for_registration_number' followed by color.");
 
       } else if (command.trim().equalsIgnoreCase("stop")) {
         break;

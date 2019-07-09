@@ -137,5 +137,4 @@ public class ParkingQueryServiceTest {
     assertEquals(spotNumber, FAILED_PARKING_SPOT);
   }
 
-
 }
