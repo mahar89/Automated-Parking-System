@@ -6,6 +6,23 @@ The system allow input in two ways.
 1) An interactive command prompt based shell where commands can be typed in.
 2) Accept a filename as a parameter at the command prompt and read the commands from that file.
 
+```
+Commands:
+      
+  "Type 'park' followed by Vehicle Registration Number and Colour.
+     
+  "Type 'leave' followed by parking spot number
+        
+  "Type 'status' to get parking status.
+        
+  "Type 'registration_numbers_for_cars_with_colour' followed by color.
+        
+  "Type 'slot_numbers_for_cars_with_colour' followed by color.
+        
+  "Type 'slot_number_for_registration_number' followed by color.
+
+```
+
 ## For Developers
 
 Please refer to the README.md in each subsequent folder for development instructions
@@ -49,5 +66,13 @@ Please refer to the README.md in each subsequent folder for development instruct
        Optional Program Arguments: 'Path to input file containing commands'
      ```
      
-    
-     
+   #### Through shell script
+      
+      i. Passing file
+      ```
+         $ ./parking_lot 'fileLocation' 
+      ```
+      ii. Interactive
+      ```
+         $ ./parking_lot
+      ```
