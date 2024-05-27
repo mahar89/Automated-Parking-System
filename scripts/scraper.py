@@ -83,3 +83,7 @@ if __name__ == "__main__":
             f"Product URL: {deal['product_url']}"
         )
         send_telegram_message(telegram_token, telegram_chat_id, message)
+
+    # Send completion message to Telegram chat
+    completion_message = "Script execution completed."
+    send_telegram_message(telegram_token, telegram_chat_id, completion_message)
