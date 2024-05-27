@@ -18,6 +18,8 @@ def scrape_deals(url):
     Returns:
     - list: A list of dictionaries, each containing deal information (title, price, link).
     """
+    logger.info(f"Scraping deals from {url}")
+
     # Send a GET request to the URL
     response = requests.get(url)
 
@@ -32,6 +34,8 @@ def scrape_deals(url):
     # Find elements containing deal information
     # These selectors might need to be adjusted based on the specific website's HTML structure
     deal_elements = soup.find_all('div', class_='deal')  # Example: <div class="deal">
+
+    logger.info(f"Found {len(deal_elements)} deal elements on {url}")
 
     deals = []
 
@@ -48,6 +52,8 @@ def scrape_deals(url):
             'link': link
         })
 
+    logger.info(f"Scraped {len(deals)} deals from {url}")
+
     return deals
 
 def send_telegram_message(token, chat_id, message):
@@ -61,6 +67,7 @@ def send_telegram_message(token, chat_id, message):
     """
     bot = Bot(token=token)
     bot.send_message(chat_id=chat_id, text=message)
+    logger.info(f"Sent message to Telegram chat: {message}")
 
 if __name__ == "__main__":
     # Telegram configuration
@@ -69,6 +76,7 @@ if __name__ == "__main__":
 
     # Get the URL of the ecommerce website from user input
     url = "https://www.amazon.in/deals"
+    logger.info(f"Entered URL: {url}")
 
     # Scrape deals from the website
     scraped_deals = scrape_deals(url)
@@ -77,8 +85,5 @@ if __name__ == "__main__":
     for deal in scraped_deals:
         message = f"{deal['title']} - {deal['price']} - {deal['link']}"
         send_telegram_message(telegram_token, telegram_chat_id, message)
-
-        # Log the sent message
-        logger.info(f"Sent deal to Telegram: {message}")
 
     logger.info("Script execution completed.")
