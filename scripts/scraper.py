@@ -32,7 +32,7 @@ def scrape_deals(api_url):
                 product_url = f"https://www.ajio.com{product['url']}"
 
                 # Check if the discount is 70% or more
-                if int(discount_percentage) >= 50:
+                if int(discount_percentage) >= 70:
                     deals.append({
                         'title': title,
                         'original_price': original_price,
@@ -62,13 +62,13 @@ def send_telegram_message(token, chat_id, message):
 
 if __name__ == "__main__":
     # Telegram configuration
-     telegram_token = os.getenv('TELEGRAM_TOKEN')
-     telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
+    telegram_token = os.getenv('TELEGRAM_TOKEN')
+    telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
 
     # API URL for Nike brand products with pagination
-    api_url = "https://www.ajio.com/api/category/83?currentPage=2&pageSize=45&format=json&query=%3Arelevance&sortBy=relevance&curated=true&curatedid=offer-deals-03022021&gridColumns=3&facets=&advfilter=true&platform=Desktop&showAdsOnNextPage=false&is_ads_enable_plp=true&displayRatings=true"
+    api_url = "https://www.ajio.com/api/category/83?currentPage=2&pageSize=45&format=json"
 
-    # Scrape Nike brand products with a discount of 50% or more
+    # Scrape Nike brand products with a discount of 70% or more
     scraped_deals = scrape_deals(api_url)
 
     # Send scraped deals to Telegram chat
