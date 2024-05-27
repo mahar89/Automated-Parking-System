@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from telegram import Bot
-from twilio.rest import Client
 import os
 
 def get_deals():
