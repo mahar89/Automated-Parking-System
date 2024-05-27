@@ -12,7 +12,7 @@ class Amztest1Spider(scrapy.Spider):
     name = "amztest1"
 
     def start_requests(self):
-        url = 'https://www.amazon.in/deals'
+        url = 'https://www.amazon.com/deals'
         yield scrapy.Request(url, callback=self.parse,
             meta={
                 "playwright" : True,
@@ -77,3 +77,7 @@ class Amztest1Spider(scrapy.Spider):
     def errback(self, failure):
         # Log errors if any occur during the request
         logger.error(f"Failed to load page: {failure.getErrorMessage()}")
+
+if __name__ == "__main__":
+    print("Script started execution")
+    print("Script execution completed")
