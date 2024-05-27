@@ -33,7 +33,7 @@ def scrape_deals(api_url):
                 product_url = f"https://www.ajio.com{product['url']}"
 
                 # Check if the discount is 70% or more
-                if int(discount_percentage) >= 70:
+                if int(discount_percentage) >= 50:
                     deals.append({
                         'title': title,
                         'original_price': original_price,
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
 
     # API URL for Nike brand products with pagination
-    api_url = "https://www.ajio.com/api/category/83?currentPage=2&pageSize=45&format=json"
+    api_url = "https://www.ajio.com/api/category/83?currentPage=2&pageSize=1&format=json"
 
     # Scrape Nike brand products with a discount of 70% or more
     scraped_deals = scrape_deals(api_url)
