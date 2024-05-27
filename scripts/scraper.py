@@ -1,85 +1,84 @@
-import os
+import requests
 import logging
-import scrapy
-from scrapy_playwright.page import PageMethod
 from telegram import Bot
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class Amztest1Spider(scrapy.Spider):
-    name = "amztest1"
+def scrape_deals(api_url):
+    deals = []
 
-    def start_requests(self):
-        logger.info("Start requests method called. Generating initial requests...")
+    try:
+        # Send a GET request to the API endpoint
+        response = requests.get(api_url)
 
-        url = 'https://www.amazon.com/deals'
-        yield scrapy.Request(url, callback=self.parse,
-            meta={
-                "playwright" : True,
-                "playwright_include_page" : True,
-                "playwright_page_methods" :[
-                        PageMethod('wait_for_selector', 'div#grid-main-container', timeout=0),
-                        PageMethod("evaluate", "window.scrollBy(0, document.body.scrollHeight)"),
-                    ],
-                "playwright_context_kwargs": {"ignore_https_errors": True,},
-                "playwright_page_goto_kwargs": {"wait_until": "networkidle",},
-                "errback": self.errback,
-            }
-        )
+        # Check if the request was successful
+        if response.status_code != 200:
+            logger.error(f"Failed to retrieve data from {api_url}. Status code: {response.status_code}")
+            return deals
 
-    def parse(self, response):
-        logger.info("Page loaded successfully. Scraping deals...")
+        # Parse the JSON response
+        json_data = response.json()
 
-        # Extract deal information
-        deals = self.extract_deals(response)
+        # Extract deal information from the response
+        for product in json_data['products']:
+            brand_name = product['brandTypeName'].lower()  # Convert to lowercase for case-insensitive comparison
+            if brand_name == 'nike':
+                title = product['name']
+                original_price = product['price']['value']
+                offer_price = product['offerPrice']['value']
+                discount_percentage = product['discountPercent'].replace('% off', '')
+                product_url = f"https://www.ajio.com{product['url']}"
 
-        # Send scraped deals to Telegram chat
-        self.send_telegram_message(deals)
+                # Check if the discount is 70% or more
+                if int(discount_percentage) >= 50:
+                    deals.append({
+                        'title': title,
+                        'original_price': original_price,
+                        'offer_price': offer_price,
+                        'discount_percentage': discount_percentage,
+                        'product_url': product_url
+                    })
 
-    def extract_deals(self, response):
-        # Extract deal information from the page
-        # This logic should be adapted based on the specific HTML structure of the Amazon deals page
-        # For demonstration purposes, we'll assume deals are stored in elements with class "deal"
-        deal_elements = response.css('div.deal')
+        logger.info(f"Scraped {len(deals)} Nike brand products with a discount of 70% or more.")
 
-        deals = []
-        for deal_element in deal_elements:
-            title = deal_element.css('h2::text').get().strip() if deal_element.css('h2::text').get() else 'Title not found'
-            price = deal_element.css('span.price::text').get().strip() if deal_element.css('span.price::text').get() else 'Price not found'
-            link = response.urljoin(deal_element.css('a::attr(href)').get()) if deal_element.css('a::attr(href)').get() else 'Link not found'
+    except Exception as e:
+        logger.error(f"An error occurred: {str(e)}")
 
-            deals.append({
-                'title': title,
-                'price': price,
-                'link': link
-            })
+    return deals
 
-        logger.info(f"Scraped {len(deals)} deals from the page")
-        return deals
+def send_telegram_message(token, chat_id, message):
+    try:
+        # Initialize the Telegram bot
+        bot = Bot(token=token)
 
-    def send_telegram_message(self, deals):
-        # Telegram configuration
-        telegram_token = os.getenv('TELEGRAM_TOKEN')
-        telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
+        # Send message to Telegram chat
+        bot.send_message(chat_id=chat_id, text=message)
 
-        if not telegram_token or not telegram_chat_id:
-            logger.error("Telegram token or chat ID not provided. Skipping sending messages.")
-            return
-
-        bot = Bot(token=telegram_token)
-
-        # Send each deal as a separate message
-        for deal in deals:
-            message = f"{deal['title']} - {deal['price']} - {deal['link']}"
-            bot.send_message(chat_id=telegram_chat_id, text=message)
-            logger.info(f"Sent message to Telegram chat: {message}")
-
-    def errback(self, failure):
-        # Log errors if any occur during the request
-        logger.error(f"Failed to load page: {failure.getErrorMessage()}")
+        logger.info("Message sent to Telegram chat.")
+    except Exception as e:
+        logger.error(f"Failed to send message to Telegram chat: {str(e)}")
 
 if __name__ == "__main__":
-    print("Script started execution")
-    print("Script execution completed")
+    # Telegram configuration
+     telegram_token = os.getenv('TELEGRAM_TOKEN')
+     telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
+
+    # API URL for Nike brand products with pagination
+    api_url = "https://www.ajio.com/api/category/83?currentPage=2&pageSize=45&format=json&query=%3Arelevance&sortBy=relevance&curated=true&curatedid=offer-deals-03022021&gridColumns=3&facets=&advfilter=true&platform=Desktop&showAdsOnNextPage=false&is_ads_enable_plp=true&displayRatings=true"
+
+    # Scrape Nike brand products with a discount of 50% or more
+    scraped_deals = scrape_deals(api_url)
+
+    # Send scraped deals to Telegram chat
+    for i, deal in enumerate(scraped_deals, 1):
+        message = (
+            f"Deal {i}:\n"
+            f"Title: {deal['title']}\n"
+            f"Original Price: ₹{deal['original_price']}\n"
+            f"Offer Price: ₹{deal['offer_price']}\n"
+            f"Discount Percentage: {deal['discount_percentage']}%\n"
+            f"Product URL: {deal['product_url']}"
+        )
+        send_telegram_message(telegram_token, telegram_chat_id, message)
