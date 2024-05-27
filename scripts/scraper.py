@@ -1,7 +1,12 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 from telegram import Bot
-import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_deals():
     url = "https://www.amazon.in/deals"
@@ -38,15 +43,17 @@ def send_telegram_message(token, chat_id, message):
     bot.send_message(chat_id=chat_id, text=message)
 
 if __name__ == "__main__":
-    # Get environment variables
     telegram_token = os.getenv('TELEGRAM_TOKEN')
     telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
 
-    # Get deals
+    logger.info("Starting the script.")
+
     deals = get_deals()
 
-    # Send deals via Telegram
+    logger.info(f"Found {len(deals)} deals.")
+
     for deal in deals:
         message = f"{deal['title']} - {deal['price']} - {deal['link']}"
         send_telegram_message(telegram_token, telegram_chat_id, message)
 
+    logger.info("Script execution completed.")
