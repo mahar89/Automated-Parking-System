@@ -12,6 +12,8 @@ class Amztest1Spider(scrapy.Spider):
     name = "amztest1"
 
     def start_requests(self):
+        logger.info("Start requests method called. Generating initial requests...")
+
         url = 'https://www.amazon.com/deals'
         yield scrapy.Request(url, callback=self.parse,
             meta={
